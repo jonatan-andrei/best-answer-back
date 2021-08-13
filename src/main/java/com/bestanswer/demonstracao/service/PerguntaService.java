@@ -6,6 +6,7 @@ import com.bestanswer.demonstracao.dto.PerguntaListaResponse;
 import com.bestanswer.demonstracao.dto.PerguntaRequest;
 import com.bestanswer.demonstracao.dto.PerguntaResponse;
 import com.bestanswer.demonstracao.repository.PerguntaRepository;
+import com.bestanswer.demonstracao.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class PerguntaService {
     @Autowired
     private PerguntaRepository perguntaRepository;
 
-    public void publicar(PerguntaRequest request) {
+    public Long publicar(PerguntaRequest request) {
         Long usuarioLogado = usuarioService.getUsuarioLogado();
         Pergunta pergunta = Pergunta.builder()
                 .idCategoria(request.getIdCategoria())
@@ -36,14 +37,15 @@ public class PerguntaService {
                 .idUsuario(usuarioLogado)
                 .quantidadeRespostas(0)
                 .build();
-        perguntaRepository.save(pergunta);
+        pergunta = perguntaRepository.save(pergunta);
+        return pergunta.getId();
     }
 
     public List<PerguntaListaResponse> bucarTodas() {
         return perguntaRepository.findAll(Sort.by(Sort.Direction.DESC, "data"))
                 .stream().map(p -> PerguntaListaResponse.builder()
                         .id(p.getId())
-                        .data(p.getData())
+                        .data(DateUtil.formatarData(p.getData()))
                         .descricaoCategoria(CategoriaPergunta.findCategoriaById(p.getIdCategoria()).getNome())
                         .titulo(p.getTitulo())
                         .quantidadeRespostas(p.getQuantidadeRespostas())
@@ -58,13 +60,13 @@ public class PerguntaService {
                 .stream().map(r -> PerguntaResponse.RespostaResponse.builder()
                         .id(r.getId())
                         .conteudo(r.getConteudo())
-                        .data(r.getData())
+                        .data(DateUtil.formatarData(r.getData()))
                         .idUsuario(r.getIdUsuario())
                         .nomeUsuario(usuarioService.getUsuarioById(r.getIdUsuario()).getNome())
                         .build()).collect(Collectors.toList());
         PerguntaResponse response = PerguntaResponse.builder()
                 .id(pergunta.getId())
-                .data(pergunta.getData())
+                .data(DateUtil.formatarData(pergunta.getData()))
                 .idUsuario(pergunta.getIdUsuario())
                 .nomeUsuario(usuarioService.getUsuarioById(pergunta.getIdUsuario()).getNome())
                 .titulo(pergunta.getTitulo())
@@ -77,7 +79,7 @@ public class PerguntaService {
         return response;
     }
 
-    public void incrementarNumeroRespostas(Long idPergunta){
+    public void incrementarNumeroRespostas(Long idPergunta) {
         perguntaRepository.incrementarNumeroRespostas(idPergunta);
     }
 }

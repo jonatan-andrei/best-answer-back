@@ -3,8 +3,6 @@ package com.bestanswer.demonstracao.dto;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 @Builder
 @Data
 public class PerguntaListaResponse {
@@ -13,7 +11,7 @@ public class PerguntaListaResponse {
 
     private String descricaoCategoria;
 
-    private LocalDateTime data;
+    private String data;
 
     private String titulo;
 

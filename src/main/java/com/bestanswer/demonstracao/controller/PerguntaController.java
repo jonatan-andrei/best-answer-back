@@ -1,5 +1,6 @@
 package com.bestanswer.demonstracao.controller;
 
+import com.bestanswer.demonstracao.domain.Pergunta;
 import com.bestanswer.demonstracao.dto.PerguntaListaResponse;
 import com.bestanswer.demonstracao.dto.PerguntaRequest;
 import com.bestanswer.demonstracao.dto.PerguntaResponse;
@@ -18,9 +19,9 @@ public class PerguntaController {
     private PerguntaService perguntaService;
 
     @PostMapping
-    public ResponseEntity publicar(@RequestBody PerguntaRequest request) {
-        perguntaService.publicar(request);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Long> publicar(@RequestBody PerguntaRequest request) {
+        Long id = perguntaService.publicar(request);
+        return ResponseEntity.ok().body(id);
     }
 
     @GetMapping

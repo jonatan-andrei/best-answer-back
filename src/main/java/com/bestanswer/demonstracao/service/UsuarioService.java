@@ -8,6 +8,8 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UsuarioService {
 
@@ -19,6 +21,10 @@ public class UsuarioService {
                 SecurityContextHolder.getContext().getAuthentication();
         UserPrincipal details = (UserPrincipal) auth.getPrincipal();
         return details.getId();
+    }
+
+    public Optional<Usuario> findByEmail(String email) {
+        return usuarioRepository.findByEmail(email);
     }
 
     public Usuario getUsuarioById(Long id) {

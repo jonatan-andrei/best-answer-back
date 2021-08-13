@@ -7,4 +7,6 @@ public class LoginResponse {
 
     private final String token;
 
+    private final String nomeUsuario;
+
 }

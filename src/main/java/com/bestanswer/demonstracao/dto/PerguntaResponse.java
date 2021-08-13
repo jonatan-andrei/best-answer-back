@@ -14,7 +14,7 @@ public class PerguntaResponse {
 
     private String descricaoCategoria;
 
-    private LocalDateTime data;
+    private String data;
 
     private String titulo;
 
@@ -36,7 +36,7 @@ public class PerguntaResponse {
 
         private Long id;
 
-        private LocalDateTime data;
+        private String data;
 
         private String conteudo;
 
